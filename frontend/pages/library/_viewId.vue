@@ -171,6 +171,9 @@ export default Vue.extend({
         case 'music':
           this.viewType = 'MusicAlbum';
           break;
+        case 'livetv':
+          this.viewType = 'LiveTV';
+          break;
         default:
           await this.refreshItems();
           break;
@@ -272,6 +275,14 @@ export default Vue.extend({
           case 'Studio':
             itemsResponse = (
               await this.$api.studios.getStudios({
+                userId: this.auth.currentUserId,
+                parentId: this.$route.params.viewId
+              })
+            ).data;
+            break;
+          case 'LiveTV':
+            itemsResponse = (
+              await this.$api.liveTv.getLiveTvChannels({
                 userId: this.auth.currentUserId,
                 parentId: this.$route.params.viewId
               })

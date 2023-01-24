@@ -1,38 +1,48 @@
 <template>
   <div>
     <v-tabs v-model="currentTab" class="mb-3" bg-color="transparent">
-      <v-tab v-for="season in seasons" :key="season.Id">
+      <v-tab v-for="season in seasons" :key="season.Id" :value="season.Id">
         {{ season.Name }}
       </v-tab>
     </v-tabs>
-    <v-tabs v-model="currentTab" class="bg-transparent">
-      <v-tab v-for="season in seasons" :key="season.Id">
-        <v-list
-          v-if="seasonEpisodes && season.Id"
-          lines="two"
-          color="transparent">
-          <v-list-item
+    <v-window v-model="currentTab">
+      <v-window-item
+        v-for="season in seasons"
+        :key="season.Id"
+        :value="season.Id">
+        <v-container v-if="seasonEpisodes && season.Id">
+          <template
             v-for="episode in seasonEpisodes[season.Id]"
-            :key="episode.Id"
-            :to="getItemDetailsLink(episode)"
-            class="flex-column flex-md-row">
-            <v-avatar width="20em" height="12em">
-              <blurhash-image
-                v-if="episode.ImageTags && episode.ImageTags.Primary"
-                :item="episode"
-                :alt="episode.Name" />
-              <watched-indicator v-if="episode.UserData.Played" />
-            </v-avatar>
-            <v-list-item-title class="text-wrap">
-              {{ episode.IndexNumber }}. {{ episode.Name }}
-            </v-list-item-title>
-            <v-list-item-subtitle class="text-wrap">
-              {{ episode.Overview }}
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-      </v-tab>
-    </v-tabs>
+            :key="episode.Id">
+            <v-hover v-slot="{ isHovering, props }">
+              <router-link
+                class="text-decoration-none text-white"
+                :to="getItemDetailsLink(episode)">
+                <v-row
+                  v-bind="props"
+                  class="my-6"
+                  :class="{ 'bg-surface': isHovering }">
+                  <v-col cols="12" md="4">
+                    <card
+                      :class="{ 'ma-10': $vuetify.display.smAndDown }"
+                      :item="episode" />
+                    <watched-indicator v-if="episode.UserData?.Played" />
+                  </v-col>
+                  <v-col cols="12" md="8">
+                    <v-list-item-title>
+                      {{ episode.IndexNumber }}. {{ episode.Name }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ episode.Overview }}
+                    </v-list-item-subtitle>
+                  </v-col>
+                </v-row>
+              </router-link>
+            </v-hover>
+          </template>
+        </v-container>
+      </v-window-item>
+    </v-window>
   </div>
 </template>
 

@@ -20,6 +20,7 @@
       effect="fade"
       :fade-effect="{ crossFade: true }"
       keyboard
+      :mousewheel="{ forceToAxis: true }"
       a11y
       @swiper="setControlledSwiper"
       @slide-change="onSlideChange"
@@ -42,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { A11y, Parallax, EffectFade, Keyboard } from 'swiper';
+import { A11y, Parallax, EffectFade, Keyboard, Mousewheel } from 'swiper';
 import type SwiperType from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -81,7 +82,7 @@ const emit = defineEmits<{
   (e: 'on-touch', isPaused: boolean, swiper: SwiperType): void;
 }>();
 
-const modules = [A11y, Parallax, EffectFade, Keyboard];
+const modules = [A11y, Parallax, EffectFade, Keyboard, Mousewheel];
 
 const currentIndex = ref(0);
 const isPaused = ref(false);
